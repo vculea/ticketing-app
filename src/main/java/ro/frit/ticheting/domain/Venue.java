@@ -1,4 +1,7 @@
 package ro.frit.ticheting.domain;
 
-public record Venue(String name, String city) {
+import lombok.Builder;
+
+@Builder(toBuilder = true)
+public record Venue(String name, String address) {
 }

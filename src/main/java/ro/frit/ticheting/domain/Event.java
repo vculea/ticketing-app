@@ -17,4 +17,8 @@ public class Event {
     private LocalDateTime startAt;
     private int capacity;
     private int bookedSeats;
+
+    public int getAvailableSeats() {
+        return capacity - bookedSeats;
+    }
 }
