@@ -1,24 +1,24 @@
-package ro.frit.ticheting.domain;
+package ro.frit.ticketing.domain;
 
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor(force = true)
-@AllArgsConstructor
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 public class Event {
     private String id;
     private String name;
     private Venue venue;
-    private LocalDateTime startAt;
+    private LocalDateTime startsAt;
     private int capacity;
     private int bookedSeats;
 
-    public int getAvailableSeats() {
+    public int availableSeats() {
         return capacity - bookedSeats;
     }
 }

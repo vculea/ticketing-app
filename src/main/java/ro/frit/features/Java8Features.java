@@ -1,92 +1,171 @@
 package ro.frit.features;
 
-import ro.frit.ticheting.domain.Event;
-import ro.frit.ticheting.domain.Venue;
+import ro.frit.ticketing.domain.Event;
+import ro.frit.ticketing.domain.Venue;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Java8Features {
-    static void main(String[] args) {
-        lamdas();
+    public static void main(String[] args) {
+        lambdas();
         streams();
         optional();
+        moreStreams();
+        methodReferences();
+        timeApi();
     }
 
     static List<Event> events() {
         return Arrays.asList(
-                new Event("1", "Rock Night", new Venue("Stadium A", "Cluj"), LocalDateTime.of(2024, 6, 15, 20, 0), 1000, 500),
-                new Event("2", "Jazz Evening", new Venue("Stadium B", "Bucuresti"), LocalDateTime.of(2024, 7, 20, 19, 30), 1500, 1200),
-                new Event("3", "La Travita", new Venue("Stadium C", "Iasi"), LocalDateTime.of(2024, 8, 10, 18, 0), 800, 600),
-                new Event("4", "Concert D", new Venue("Stadium D", "Oradea"), LocalDateTime.of(2024, 9, 5, 21, 0), 2000, 1800)
-        );
+                new Event("rock-cluj", "Rock Night", new Venue("BT Arena", "Cluj"), LocalDateTime.of(2030, 6, 12, 20, 0), 500, 480),
+                new Event("jazz-cluj", "Jazz in the Park", new Venue("Central Park", "Cluj"), LocalDateTime.of(2030, 7, 3, 19, 0), 200, 200),
+                new Event("opera-iasi", "La Traviata", new Venue("National Opera", "Iasi"), LocalDateTime.of(2030, 9, 20, 18, 30), 350, 100),
+                new Event("electro-buc", "Electronic Night", new Venue("Form Space", "Bucuresti"), LocalDateTime.of(2030, 10, 10, 22, 0), 800, 0));
     }
 
     private static void optional() {
-        System.out.println("----Optional----");
+        System.out.println("---- OPTIONAL ----");
+
         List<Event> events = events();
         Event found = null;
+
         for (Event event : events) {
-            if (event.getId().equalsIgnoreCase("nu-exista")) {
+            if (event.getId().equalsIgnoreCase("non-existing")) {
                 found = event;
                 break;
             }
-
         }
-        if (found != null) {
-            System.out.println(found);
+
+        if (found == null) {
+            System.out.println("Event not found");
         } else {
-            System.out.println("Nu exista");
+            System.out.println(found.getName());
         }
 
-        Optional<Event> any = events.stream().filter(event -> event.getId().equalsIgnoreCase("nu-exista"))
+
+
+        Optional<Event> optionalEvent = events().stream()
+                .filter(event -> event.getId().equalsIgnoreCase("non-existing"))
                 .findAny();
-        if (any.isPresent()) {
-            System.out.println(any.get());
+
+        if (optionalEvent.isPresent()) {
+            Event event = optionalEvent.get();
+            System.out.println(event.getName());
         } else {
-            System.out.println("Nu exista");
+            System.out.println("Event not found");
         }
 
-        events.stream().filter(event -> event.getId().equalsIgnoreCase("nu-exista"))
-                .findAny().orElseGet(() -> new Event("0", "Nu exista", new Venue("N/A", "N/A"), LocalDateTime.now(), 0, 0));
+//        System.out.println(optionalEvent.get().getName());
+
+        Event event1 = events.stream()
+                .filter(event -> event.getId().equalsIgnoreCase("rock-cluj"))
+                .findAny()
+                .orElse(defaultEvent());
+
+        Event event2 = events.stream()
+                .filter(event -> event.getId().equalsIgnoreCase("rock-cluj"))
+                .findAny()
+                .orElseGet(Java8Features::defaultEvent);
+
+        System.out.println(event1.getName());
+        System.out.println(event2.getName());
+
+        var var = 2;
     }
 
-    private static void lamdas() {
-        System.out.println("Lamdas");
+    private static Event defaultEvent() {
+        System.out.println("TIME CONSUMING OPERATION");
+        return new Event("non-existing", "Non-existing", new Venue("Non-existing", "Non-existing"), LocalDateTime.now(), 0, 0);
+    }
+
+    private static void lambdas() {
+        System.out.println("---- LAMBDAS ----");
+
         List<Event> events = events();
-        Predicate<Event> predicate = new Predicate<Event>() {
+
+        Predicate<Event> moreThan200Bookings = new Predicate<Event>() {
             @Override
             public boolean test(Event event) {
                 return event.getBookedSeats() >= 200;
             }
         };
 
-        List<Event> filteredEvents = new ArrayList<>();
+        List<Event> filtered = new ArrayList<>();
         for (Event event : events) {
-            if (predicate.test(event)) {
-                filteredEvents.add(event);
+
+            if (moreThan200Bookings.test(event)) {
+                filtered.add(event);
             }
         }
 
-        filteredEvents.forEach(System.out::println);
-        System.out.println("Using Lamdas");
+        filtered.forEach(System.out::println);
+
+        System.out.println("---- JAVA 8+ ----");
 
         List<Event> collect = events.stream()
                 .filter(event -> event.getBookedSeats() >= 200)
-                .toList();
+                .collect(Collectors.toList());
+
+        collect.forEach(System.out::println);
     }
 
     private static void streams() {
-        System.out.println("----- Streams ------");
-        List<String> filteredEvents = events().stream()
+        System.out.println("---- STREAMS ----");
+
+        List<String> events = events().stream()
                 .filter(event -> event.getCapacity() > 300)
                 .map(Event::getName)
-                .toList();
+                .sorted()
+                .collect(Collectors.toList());
 
-        filteredEvents.forEach(System.out::println);
+        events.forEach(System.out::println);
+    }
+
+    // Added after the session: grouping, a sum, and a yes/no question on a stream.
+    private static void moreStreams() {
+        System.out.println("---- MORE STREAMS ----");
+
+        Map<String, List<String>> namesByCity = events().stream()
+                .collect(Collectors.groupingBy(
+                        event -> event.getVenue().city(),
+                        Collectors.mapping(Event::getName, Collectors.toList())));
+        System.out.println(namesByCity);
+
+        int bookedInTotal = events().stream()
+                .mapToInt(Event::getBookedSeats)
+                .sum();
+        System.out.println("booked in total: " + bookedInTotal);
+
+        boolean anySoldOut = events().stream().anyMatch(event -> event.availableSeats() == 0);
+        System.out.println("any sold out: " + anySoldOut);
+    }
+
+    // Added after the session: a method reference is a lambda that only calls one method.
+    private static void methodReferences() {
+        System.out.println("---- METHOD REFERENCES ----");
+
+        Function<Event, String> anyInstance = Event::getName;            // event -> event.getName()
+        Function<Integer, String> staticMethod = String::valueOf;        // n -> String.valueOf(n)
+        Supplier<List<Event>> constructor = ArrayList::new;              // () -> new ArrayList<>()
+
+        System.out.println(anyInstance.apply(events().get(0)) + " " + staticMethod.apply(42) + " " + constructor.get());
+        events().stream().map(Event::getId).forEach(System.out::println);  // id -> System.out.println(id)
+    }
+
+    // Added after the session: java.time has immutable dates and times, with one type for each idea.
+    private static void timeApi() {
+        System.out.println("---- JAVA.TIME ----");
+
+        LocalDateTime sessionOne = LocalDateTime.of(2026, 10, 12, 18, 0);
+        LocalDateTime rockNight = events().get(0).getStartsAt();
+        System.out.println(sessionOne.getDayOfWeek() + ", ends at " + sessionOne.plusHours(3).toLocalTime());
+        System.out.println("days until Rock Night: " + Duration.between(sessionOne, rockNight).toDays());
+        System.out.println("already started: " + rockNight.isBefore(sessionOne));
     }
 }

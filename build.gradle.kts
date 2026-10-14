@@ -9,6 +9,7 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
 repositories {
     mavenCentral()
 }
