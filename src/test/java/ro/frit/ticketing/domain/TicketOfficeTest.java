@@ -197,6 +197,18 @@ class TicketOfficeTest {
 
         List<List<Booking>> batches = office.bookingsInBatches(2);
 
+        assertEquals(List.of(2, 2), batches.stream().map(List::size).toList());
+    }
+
+    @Test
+    void bookingsIncludeIncompleteLastBatch() {
+        TicketOffice office = new TicketOffice(List.of(event("e1", 100, 0)));
+        for (String email : List.of("a@mail.ro", "b@mail.ro", "c@mail.ro")) {
+            office.book(new BookingRequest("e1", email, 1));
+        }
+
+        List<List<Booking>> batches = office.bookingsInBatches(2);
+
         assertEquals(List.of(2, 1), batches.stream().map(List::size).toList());
     }
 
