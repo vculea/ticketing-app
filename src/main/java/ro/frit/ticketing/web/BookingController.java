@@ -1,6 +1,7 @@
 package ro.frit.ticketing.web;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class BookingController {
     }
 
     private record BookingPayload(
-            @NotBlank String customerEmail,
+            @NotBlank @Email String customerEmail,
             @Positive int seats) {
     }
 }
