@@ -190,7 +190,7 @@ class TicketOfficeTest {
     @Test
     void bookingsComeInBatches() {
         TicketOffice office = new TicketOffice(List.of(event("e1", 100, 0)));
-        for (String email : List.of("a@mail.ro", "b@mail.ro", "c@mail.ro")) {
+        for (String email : List.of("a@mail.ro", "b@mail.ro", "c@mail.ro", "d@mail.ro")) {
             office.book(new BookingRequest("e1", email, 1));
         }
 
