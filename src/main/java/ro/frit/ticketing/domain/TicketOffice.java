@@ -1,5 +1,7 @@
 package ro.frit.ticketing.domain;
 
+import ro.frit.ticketing.service.BookingRequest;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;

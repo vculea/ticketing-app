@@ -1,6 +1,7 @@
 package ro.frit.ticketing.domain;
 
 import org.junit.jupiter.api.Test;
+import ro.frit.ticketing.service.BookingRequest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

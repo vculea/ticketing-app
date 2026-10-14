@@ -1,9 +1,9 @@
 package ro.frit.features;
 
-import ro.frit.ticketing.domain.BookingRequest;
 import ro.frit.ticketing.domain.BookingResult;
 import ro.frit.ticketing.domain.Event;
 import ro.frit.ticketing.domain.Venue;
+import ro.frit.ticketing.service.BookingRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
