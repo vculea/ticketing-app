@@ -1,0 +1,12 @@
+- POST (/events/{eventId}/bookings {})
+  - add a booking to an event for a customer
+  - no such event
+  - not enough seats
+  - event already started
+  - invalid email
+  - invalid seat number
+  - incomplete request payload
+  - broken json
+  - wrong field type
+  - not json
+  - 
