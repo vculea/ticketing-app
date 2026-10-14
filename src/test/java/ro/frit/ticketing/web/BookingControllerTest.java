@@ -21,7 +21,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 class BookingControllerTest {
 
     private static final String VALID_BODY = "{\n" +
-            "  \"customerName\": \"John Doe\",\n" +
+            "  \"customerEmail\": \"john.doe@example.com\",\n" +
             "  \"seats\": 2\n" +
             "}";
 
@@ -39,7 +39,7 @@ class BookingControllerTest {
 
     @Test
     void unknownEventIsNotFound() throws Exception {
-        when(ticketOffice.book(new BookingRequest("e9", "ana@mail.ro", 2)))
+        when(ticketOffice.book(new BookingRequest("e9", "john.doe@example.com", 2)))
                 .thenReturn(new BookingResult.UnknownEvent("e9"));
 
         mockMvc.perform(post("/events/e9/bookings").contentType(APPLICATION_JSON.toString()).content(VALID_BODY))
