@@ -3,8 +3,8 @@ package ro.frit.ticketing.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ro.frit.ticketing.domain.Event;
-import ro.frit.ticketing.domain.TicketOffice;
 import ro.frit.ticketing.domain.Venue;
+import ro.frit.ticketing.service.TicketOffice;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class TicketingConfig {
     public TicketOffice ticketOffice(TicketingProperties ticketingProperties) {
         List<Event> events = ticketingProperties.seedEvents().stream().map(TicketingConfig::toEvent).toList();
         System.out.println("Creating TicketOffice bean with " + events.size() + " events");
-        return new TicketOffice(List.of());
+        return new TicketOffice(events);
     }
 
     private static Event toEvent(TicketingProperties.SeedEvent seedEvent) {

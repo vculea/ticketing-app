@@ -1,4 +1,4 @@
-package ro.frit.ticketing.service;
+package ro.frit.ticketing.domain;
 
 import lombok.Builder;
 

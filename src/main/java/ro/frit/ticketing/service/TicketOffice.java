@@ -1,6 +1,9 @@
-package ro.frit.ticketing.domain;
+package ro.frit.ticketing.service;
 
-import ro.frit.ticketing.service.BookingRequest;
+import ro.frit.ticketing.domain.Booking;
+import ro.frit.ticketing.domain.BookingRequest;
+import ro.frit.ticketing.domain.BookingResult;
+import ro.frit.ticketing.domain.Event;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,6 +20,10 @@ public class TicketOffice {
                 throw new IllegalArgumentException("Duplicate event id " + event.getId());
             }
         });
+    }
+
+    public List<Event> allEvents() {
+        return events.values().stream().toList();
     }
 
     public BookingResult book(BookingRequest request) {
