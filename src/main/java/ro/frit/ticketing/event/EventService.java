@@ -8,7 +8,6 @@ import ro.frit.ticketing.event.dto.EventResponse;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class EventService {
     }
 
     public EventResponse create(CreateEventRequest request) {
-        Event event = eventMapper.toEntity(UUID.randomUUID().toString(), request);
+        Event event = eventMapper.toEntity(request);
         return eventMapper.toResponse(eventRepository.save(event));
     }
 
@@ -55,7 +54,7 @@ public class EventService {
     public void reserveSeats(String eventId, int seats) {
         Event event = getEvent(eventId);
 
-        if (!event.getStartsAt().isAfter(LocalDateTime.now())) {
+        if (!event.getStartsAt().isAfter(LocalDateTime.now().truncatedTo(java.time.temporal.ChronoUnit.SECONDS))) {
             throw new EventAlreadyStartedException(eventId, event.getStartsAt());
         }
         if (seats > event.availableSeats()) {

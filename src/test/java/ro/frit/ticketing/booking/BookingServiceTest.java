@@ -1,8 +1,13 @@
 package ro.frit.ticketing.booking;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import ro.frit.ticketing.booking.dto.BookingResponse;
 import ro.frit.ticketing.booking.dto.CreateBookingRequest;
+import ro.frit.ticketing.config.TestcontainerConfiguration;
 import ro.frit.ticketing.event.*;
 
 import java.time.LocalDateTime;
@@ -14,16 +19,24 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit test (no Spring): booking seats, with the real {@link EventService} and the in-memory repositories. The event
  * rules themselves are tested in {@code EventServiceTest}.
  */
+@DataMongoTest
+@Import({BookingMapper.class, BookingService.class, EventService.class, EventMapper.class, TestcontainerConfiguration.class})
 class BookingServiceTest {
 
     private static final LocalDateTime NOW = LocalDateTime.now();
 
-    private final EventRepository eventRepository = new EventRepository();
-    private final BookingRepository bookingRepository = new BookingRepository();
-    private final BookingService bookingService = new BookingService(
-            bookingRepository,
-            new BookingMapper(),
-            new EventService(new EventMapper(), eventRepository));
+    @Autowired
+    private EventRepository eventRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private BookingService bookingService;
+
+    @BeforeEach
+    void setUp() {
+        bookingRepository.deleteAll();
+        eventRepository.deleteAll();
+    }
 
     @Test
     void confirmedBookingIsStored() {

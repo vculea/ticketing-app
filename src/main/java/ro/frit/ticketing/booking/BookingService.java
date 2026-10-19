@@ -26,7 +26,7 @@ public class BookingService {
         eventService.reserveSeats(eventId, request.seats());
 
         Booking booking = bookingMapper.toEntity(
-                UUID.randomUUID().toString(), eventId, request, LocalDateTime.now());
+                UUID.randomUUID().toString(), eventId, request, LocalDateTime.now().truncatedTo(java.time.temporal.ChronoUnit.SECONDS));
         return bookingMapper.toResponse(bookingRepository.save(booking));
     }
 

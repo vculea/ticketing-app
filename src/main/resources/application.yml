@@ -1,6 +1,8 @@
 spring:
   application:
     name: ticketing
+  mongodb:
+      database: ticketing
   mvc:
     problemdetails:
       enabled: true

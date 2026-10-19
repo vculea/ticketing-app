@@ -4,8 +4,11 @@ import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.boot.validation.autoconfigure.ValidationAutoConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import ro.frit.ticketing.config.TestcontainerConfiguration;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @SpringJUnitConfig(EventRepository.class)
 @ImportAutoConfiguration(ValidationAutoConfiguration.class)
+@DataMongoTest
+@Import({EventMapper.class, EventService.class, TestcontainerConfiguration.class})
 class EventRepositoryTest {
 
     @Autowired
