@@ -8,12 +8,9 @@ import java.util.List;
 @ConfigurationProperties(prefix = "ticketing")
 public record TicketingProperties(List<SeedEvent> seedEvents) {
 
-    public TicketingProperties(List<SeedEvent> seedEvents) {
-        this.seedEvents = seedEvents == null ? List.of() : List.copyOf(seedEvents);
+    public TicketingProperties {
+        seedEvents = seedEvents == null ? List.of() : List.copyOf(seedEvents);
     }
 
-    public record SeedEvent(String id, String name, String venueName, String city, LocalDateTime startsAt,
-                            int capacity) {
-    }
-
+    public record SeedEvent(String id, String name, String venueName, String city, LocalDateTime startsAt, int capacity) {}
 }
