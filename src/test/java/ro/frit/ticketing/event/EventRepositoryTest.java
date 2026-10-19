@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.boot.validation.autoconfigure.ValidationAutoConfiguration;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import ro.frit.ticketing.config.MongoValidationConfig;
 import ro.frit.ticketing.config.TestcontainerConfiguration;
 
 import java.time.LocalDateTime;
@@ -16,13 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Spring test (a small context: the repository and Spring Boot's validation setup): an invalid {@link Event} is
- * rejected when it is saved, and nothing is stored. Without Spring, the {@code @Valid} on {@code save} is not checked.
+ * Spring test (a Mongo slice with Spring Boot's validation setup): an invalid {@link Event} is rejected when it is
+ * saved, and nothing is stored. The check is done by the {@code ValidatingEntityCallback} from {@link MongoValidationConfig}.
  */
-@SpringJUnitConfig(EventRepository.class)
-@ImportAutoConfiguration(ValidationAutoConfiguration.class)
 @DataMongoTest
-@Import({EventMapper.class, EventService.class, TestcontainerConfiguration.class})
+@ImportAutoConfiguration(ValidationAutoConfiguration.class)
+@Import({MongoValidationConfig.class, TestcontainerConfiguration.class})
 class EventRepositoryTest {
 
     @Autowired

@@ -1,15 +1,15 @@
 package ro.frit.ticketing.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
 import org.testcontainers.mongodb.MongoDBContainer;
 
-@TestConfiguration
-@ImportTestcontainers
+@TestConfiguration(proxyBeanMethods = false)
 public class TestcontainerConfiguration {
+    @Bean
     @ServiceConnection
-    static MongoDBContainer mongoDBContainer() {
+    MongoDBContainer mongoDBContainer() {
         return new MongoDBContainer("mongo:8.0");
     }
 }

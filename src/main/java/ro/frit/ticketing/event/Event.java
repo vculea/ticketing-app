@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-// The constraints are checked when the event is saved: EventRepository.save takes a @Valid Event.
+// The constraints are checked when the event is saved, by the ValidatingEntityCallback from MongoValidationConfig.
 @Getter
 @ToString
 @NoArgsConstructor
