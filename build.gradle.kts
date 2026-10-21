@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.spring.boot.starter.data.mongodb)
     implementation(libs.spring.boot.starter.validation)
     compileOnly(libs.lombok)
+    developmentOnly(libs.spring.boot.docker.compose)
     annotationProcessor(libs.lombok)
 
     testImplementation(libs.spring.boot.starter.data.mongodb.test)

@@ -1,3 +1,7 @@
 spring:
   mongodb:
     uri: mongodb+srv://ticketing-app:PZshD2o3jbCUP1HW@ticketing.txyan6p.mongodb.net/ticketing?retryWrites=true&w=majority
+
+  docker:
+    compose:
+      enabled: false

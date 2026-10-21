@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ro.frit.ticketing.event.dto.CreateEventRequest;
 import ro.frit.ticketing.event.dto.EventResponse;
+import ro.frit.ticketing.event.dto.EventSearchRequest;
 
 import java.net.URI;
 import java.util.List;
@@ -19,10 +20,11 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventResponse> findAll(@RequestParam(required = false) String city) {
-        return city == null || city.isBlank()
-                ? eventService.findAll()
-                : eventService.findUpcomingIn(city);
+    public List<EventResponse> findAll(EventSearchRequest request)
+     {
+        return request.city() == null || request.city().isBlank()
+                ? eventService.search(request)
+                : eventService.findUpcomingIn(request.city());
     }
 
     @GetMapping("/top")

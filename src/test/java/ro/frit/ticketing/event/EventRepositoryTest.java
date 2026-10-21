@@ -1,6 +1,7 @@
 package ro.frit.ticketing.event;
 
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -27,6 +28,11 @@ class EventRepositoryTest {
     @Autowired
     private EventRepository eventRepository;
 
+    @BeforeEach
+    void clearEvents() {
+        eventRepository.deleteAll();
+    }
+
     @Test
     void invalidEventIsNotSaved() {
         Event invalid = Event.builder()
@@ -40,4 +46,5 @@ class EventRepositoryTest {
         assertThrows(ConstraintViolationException.class, () -> eventRepository.save(invalid));
         assertTrue(eventRepository.findById("e1").isEmpty());
     }
+
 }

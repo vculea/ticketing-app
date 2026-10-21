@@ -36,7 +36,7 @@ class EventControllerTest {
 
     @Test
     void listsAllEvents() throws Exception {
-        when(eventService.findAll()).thenReturn(List.of(
+        when(eventService.search(null)).thenReturn(List.of(
                 event("e1", "Concert", "Cluj", 100, 70),
                 event("e2", "Play", "Iasi", 50, 50)));
 
@@ -78,7 +78,7 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].city").value("Cluj"));
 
-        verify(eventService, never()).findAll();
+        verify(eventService, never()).search(null);
     }
 
     @Test

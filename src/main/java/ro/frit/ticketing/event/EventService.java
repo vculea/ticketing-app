@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.frit.ticketing.event.dto.CreateEventRequest;
 import ro.frit.ticketing.event.dto.EventResponse;
+import ro.frit.ticketing.event.dto.EventSearchRequest;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -15,8 +16,8 @@ public class EventService {
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
 
-    public List<EventResponse> findAll() {
-        return toResponses(eventRepository.findAll());
+    public List<EventResponse> search(EventSearchRequest eventSearchRequest) {
+        return toResponses(eventRepository.search(eventSearchRequest));
     }
 
     public EventResponse findById(String id) {
