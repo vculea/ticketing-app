@@ -212,4 +212,25 @@ class BookingControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.detail").value("No booking with id b9 for event e1"));
     }
+
+    @Test
+    void summaryIsReturned() throws Exception {
+        when(bookingService.summaryFor("e1")).thenReturn(new BookingSummaryResponse("e1", 3, 6, 2.0));
+
+        mockMvc.perform(get("/events/e1/bookings/summary"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.eventId").value("e1"))
+                .andExpect(jsonPath("$.bookings").value(3))
+                .andExpect(jsonPath("$.seats").value(6))
+                .andExpect(jsonPath("$.averageSeatsPerBooking").value(2.0));
+    }
+
+    @Test
+    void summaryOfAnUnknownEventIsNotFound() throws Exception {
+        when(bookingService.summaryFor("e9")).thenThrow(new EventNotFoundException("e9"));
+
+        mockMvc.perform(get("/events/e9/bookings/summary"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_PROBLEM_JSON));
+    }
 }

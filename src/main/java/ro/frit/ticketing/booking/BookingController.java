@@ -24,4 +24,9 @@ public class BookingController {
     public BookingResponse findById(@PathVariable String eventId, @PathVariable String bookingId) {
         return bookingService.findById(eventId, bookingId);
     }
+
+    @GetMapping("/summary")
+    public BookingSummaryResponse summary(@PathVariable String eventId) {
+        return bookingService.summaryFor(eventId);
+    }
 }

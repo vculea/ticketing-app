@@ -22,6 +22,10 @@ All errors are a `ProblemDetail`, with the content type `application/problem+jso
 
 The rules behind the 404 and 409 (exactly the free seats, an event that starts right now, started is checked before seats) are checked in `EventServiceTest` and `BookingServiceTest`, because the controller tests replace the service with a mock.
 
+## Booking summary: GET /events/{eventId}/bookings/summary
+
+Returns the booking count, total seats, and average seats per booking for an existing event. An event with no bookings has zero bookings and seats, and a `null` average; an unknown event returns 404.
+
 ## Not yet decided
 
 - Can the same customer book the same event twice? Today, yes.

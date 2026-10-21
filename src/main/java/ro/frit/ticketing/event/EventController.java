@@ -22,9 +22,12 @@ public class EventController {
     @GetMapping
     public List<EventResponse> findAll(EventSearchRequest request)
      {
-        return request.city() == null || request.city().isBlank()
-                ? eventService.search(request)
-                : eventService.findUpcomingIn(request.city());
+        if (request.city() != null && !request.city().isBlank()) {
+            return eventService.findUpcomingIn(request.city());
+        }
+        return request.name() == null && request.from() == null && request.to() == null
+                ? eventService.search(null)
+                : eventService.search(request);
     }
 
     @GetMapping("/top")

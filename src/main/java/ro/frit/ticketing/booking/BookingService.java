@@ -38,6 +38,11 @@ public class BookingService {
                 .orElseThrow(() -> new BookingNotFoundException(eventId, bookingId));
     }
 
+    public BookingSummaryResponse summaryFor(String eventId) {
+        eventService.findById(eventId);
+        return bookingMapper.toSummary(eventId, bookingRepository.findAllByEventId(eventId));
+    }
+
     public Map<String, Integer> bookedSeatsPerEvent() {
         return bookingRepository.findAll().stream()
                 .collect(Collectors.groupingBy(Booking::getEventId, Collectors.summingInt(Booking::getSeats)));

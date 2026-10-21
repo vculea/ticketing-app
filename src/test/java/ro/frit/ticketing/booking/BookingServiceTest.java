@@ -106,6 +106,32 @@ class BookingServiceTest {
         assertEquals(Map.of("e1", 5, "e2", 1), bookingService.bookedSeatsPerEvent());
     }
 
+    @Test
+    void summaryCountsAndAveragesTheEventsBookings() {
+        eventRepository.save(event("e1", 100, 0));
+        eventRepository.save(event("e2", 100, 0));
+        bookingService.book("e1", new CreateBookingRequest("ana@mail.ro", 2));
+        bookingService.book("e1", new CreateBookingRequest("ion@mail.ro", 3));
+        bookingService.book("e1", new CreateBookingRequest("dan@mail.ro", 1));
+        bookingService.book("e2", new CreateBookingRequest("ana@mail.ro", 4));
+
+        BookingSummaryResponse summary = bookingService.summaryFor("e1");
+
+        assertEquals(new BookingSummaryResponse("e1", 3, 6, 2.0), summary);
+    }
+
+    @Test
+    void eventWithoutBookingsHasZeroBookingsAndNoAverage() {
+        eventRepository.save(event("e1", 100, 0));
+
+        assertEquals(new BookingSummaryResponse("e1", 0, 0, null), bookingService.summaryFor("e1"));
+    }
+
+    @Test
+    void unknownEventHasNoSummary() {
+        assertThrows(EventNotFoundException.class, () -> bookingService.summaryFor("e9"));
+    }
+
     private static Event event(String id, int capacity, int bookedSeats) {
         return Event.builder()
                 .id(id)
