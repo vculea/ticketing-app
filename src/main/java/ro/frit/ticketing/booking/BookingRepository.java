@@ -6,5 +6,5 @@ import org.springframework.validation.annotation.Validated;
 
 @Repository
 @Validated
-public interface BookingRepository extends MongoRepository<Booking, String> {
+public interface BookingRepository extends MongoRepository<Booking, String>, BookingReportRepository {
 }

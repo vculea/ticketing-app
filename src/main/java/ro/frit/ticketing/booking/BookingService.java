@@ -42,4 +42,8 @@ public class BookingService {
         return bookingRepository.findAll().stream()
                 .collect(Collectors.groupingBy(Booking::getEventId, Collectors.summingInt(Booking::getSeats)));
     }
+
+    public Map<String, Integer> bookedSeatsPerEventUsingAggregation() {
+        return bookingRepository.sumSeatsPerEvent();
+    }
 }
