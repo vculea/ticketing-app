@@ -1,6 +1,8 @@
 package ro.frit.ticketing.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import ro.frit.ticketing.event.dto.CreateEventRequest;
 import ro.frit.ticketing.event.dto.EventResponse;
@@ -52,6 +54,7 @@ public class EventService {
                 .toList());
     }
 
+    @Retryable(includes = OptimisticLockingFailureException.class, maxRetries = 3, delay = 1000)
     public void reserveSeats(String eventId, int seats) {
         Event event = getEvent(eventId);
 
